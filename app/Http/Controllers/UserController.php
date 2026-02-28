@@ -2,29 +2,40 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\UserFilters;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Repository\UserRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
     //создаём конструктор и в нём свойство UserRepository, для возможности использования репозитория
     public function __construct(
-        private readonly UserRepository $userRepository
+        private readonly UserRepository $userRepository,
+        private readonly UserFilters $userFilters
     )
     {
     }
-    public function index() //Display a listing of the resource.
+    public function index(Request $request) : View //Display a listing of the resource.
     {
-        $users = User::query()->paginate(10);
+        //получение текущего пользователя
+        $currentUser1 = Auth::user(); // 1 способ - use Illuminate\Support\Facades\Auth;
+        $currentUser2 = auth()->user(); // 2 способ - функция auth()
+        //если вернулся null - пользователь не авторизировался
 
+        $query = User::query();
         return view('users.index', [
-            'users' => $users,
+            'users' => $this->userFilters
+                ->apply($request, $query)
+                ->paginate(10)
+                ->withQueryString(),
         ]);
     }
 

@@ -13,6 +13,7 @@ use Illuminate\Notifications\Notifiable;
  * @property string $email
  * @property string $password
  * @property integer $id
+ * @property boolean $is_admin
  */
 class User extends Authenticatable
 {
@@ -28,6 +29,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin',
     ];
 
     /**
@@ -57,4 +59,15 @@ class User extends Authenticatable
     {
         return $this->hasOne(Avatar::class);
     }
+
+//    //Акцессор (представляет полученные из БД строки в верхнем регистре)
+//    public function getNameAttribute(): string
+//    {
+//        return Str::upper($this->attributes['name']);
+//    }
+//    //Мутатор
+//    public function setSlugAttribute(string $name): void
+//    {
+//        $this->attributes['name'] = Str::upper($name);
+//    }
 }
