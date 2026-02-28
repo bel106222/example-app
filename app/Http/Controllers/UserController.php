@@ -31,6 +31,38 @@ class UserController extends Controller
         //если вернулся null - пользователь не авторизировался
 
         $query = User::query();
+
+//        dd($query->take(5)->get()); //берём первые 5 из коллекции query
+//        dd(
+//            $query->take(5)
+//                ->select(['id', 'name', 'email'])
+//                ->orderByDesc('id')
+//                ->get()
+//                ->toArray()
+//        ); //запросили коллекцию из 5 объектов с конца и обернули в массив
+
+//        $page = 3;
+//        $perPage = 10;
+//        dd(
+//            $query
+//                ->skip($page * $perPage - $perPage)
+//                ->take($perPage)
+//                ->get()
+//        ); //c 3 страницы запросили коллекцию из 10 объектов
+
+//        $usersIds = [2, 7, 10]; //массив значений id
+//        dd(
+//            $query->select(['id', 'name', 'email'])
+//                ->whereIn('id', $usersIds)
+//                ->get()
+//        ); //запросили коллекцию объектов с id из массива
+
+//        dd(
+//            $query->select(['id', 'name', 'email'])
+//                ->has('phones')
+//                ->get()
+//        ); //запросили коллекцию объектов имеющих телефоны (связь с таблицей phones)
+
         return view('users.index', [
             'users' => $this->userFilters
                 ->apply($request, $query)

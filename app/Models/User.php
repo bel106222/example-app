@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -58,6 +59,11 @@ class User extends Authenticatable
     public function avatar() : HasOne
     {
         return $this->hasOne(Avatar::class);
+    }
+
+    public function book() : BelongsTo //привязываем пользователя к книге 'один к одному'
+    {
+        return $this->belongsTo(Books::class);
     }
 
 //    //Акцессор (представляет полученные из БД строки в верхнем регистре)
