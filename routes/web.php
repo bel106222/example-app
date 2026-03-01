@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +23,16 @@ Route::get('/test', function () {
 
 //Route::middleware('auth')->resource('users', UserController::class);
 Route::resource('users', UserController::class);
+
+//BOOKS CONTROLLER
+Route::prefix('books')->name('books.')->group(callback: function () {
+    Route::get('', [BookController::class, 'index'])->name('index');
+    Route::get('create', [BookController::class, 'create'])->name('create');
+    Route::get('{book}/edit', [BookController::class, 'edit'])->name('edit');
+    Route::patch('{book}', [BookController::class, 'update'])->name('update');
+    Route::delete('{book}', [BookController::class, 'destroy'])->name('destroy');
+    Route::post('{book}/restore', [BookController::class, 'restore'])->name('restore');
+});
 
 Auth::routes();
 

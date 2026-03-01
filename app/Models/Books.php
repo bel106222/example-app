@@ -13,10 +13,12 @@ class Books extends Model
 {
     use HasUuids, SoftDeletes, HasFactory, Notifiable;
 
+    //public mixed $title = '';
+
     /**
      * @property string $id
      * @property int $user_id
-     * @property string $tite
+     * @property string $title
      */
     protected $fillable = [
         'user_id', //владелец книги
