@@ -14,6 +14,8 @@ class Books extends Model
     use HasUuids, SoftDeletes, HasFactory, Notifiable;
 
     //public mixed $title = '';
+    //public mixed $title;
+    //public mixed $title;
 
     /**
      * @property string $id
