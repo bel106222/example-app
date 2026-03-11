@@ -111,6 +111,5 @@ class BookTest extends TestCase
 
         $response = $this->delete(route('api.books.destroy', $book));
         $response->assertStatus(200);
-        //$this->assertIsNull($book);
     }
 }

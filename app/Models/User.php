@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use \Illuminate\Database\Eloquent\Concerns\HasUuids;
+use \Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -12,14 +14,15 @@ use Illuminate\Notifications\Notifiable;
 /**
  * @property string $name
  * @property string $email
+ * @property string $phone
  * @property string $password
- * @property integer $id
+ * @property integer $organization_id
  * @property boolean $is_admin
  */
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasUuids, SoftDeletes, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -30,7 +33,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
         'is_admin',
+        'organization_id',
     ];
 
     /**
@@ -64,6 +69,11 @@ class User extends Authenticatable
     public function book() : BelongsTo //привязываем пользователя к книге 'один к одному'
     {
         return $this->belongsTo(Books::class);
+    }
+
+    public function organization() : HasOne
+    {
+        return $this->hasOne(Organization::class);
     }
 
 //    //Акцессор (представляет полученные из БД строки в верхнем регистре)

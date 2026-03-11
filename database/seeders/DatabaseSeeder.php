@@ -22,11 +22,14 @@ class DatabaseSeeder extends Seeder
 //            'email' => 'test@example.com',
 //        ]);
 
-        User::factory(15)->create(); //создаём 15 пользователей
-
         //Вызов дополнительных seeder-ов
         $this->call([
-            BookSeeder::class
+            OrganizationSeeder::class,
+            UserSeeder::class,
+            BookSeeder::class,
+            CategorySeeder::class,
+            ServiceSeeder::class,
+            PriceSeeder::class,
         ]);
     }
 }
