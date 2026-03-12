@@ -34,6 +34,16 @@ Route::prefix('books')->name('books.')->group(callback: function () {
     Route::post('{book}/restore', [BookController::class, 'restore'])->name('restore');
 });
 
+//ORGANIZATION CONTROLLER
+Route::prefix('organizations')->name('organizations.')->group(callback: function () {
+    Route::get('', [OrgaController::class, 'index'])->name('index');
+//    Route::get('create', [BookController::class, 'create'])->name('create');
+//    Route::get('{book}/edit', [BookController::class, 'edit'])->name('edit');
+//    Route::patch('{book}', [BookController::class, 'update'])->name('update');
+//    Route::delete('{book}', [BookController::class, 'destroy'])->name('destroy');
+//    Route::post('{book}/restore', [BookController::class, 'restore'])->name('restore');
+});
+
 Auth::routes();
 
 Route::get('/home', [\App\Http\Controllers\Web\HomeController::class, 'index'])->name('home');

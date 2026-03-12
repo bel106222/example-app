@@ -12,8 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('order_items', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->foreignId('serviceId')
+                ->references('id')
+                ->on('services');
+            $table->foreignId('orderId')
+                ->references('id')
+                ->on('orders');
+            $table->foreignId('userId')
+                ->references('id')
+                ->on('users');
+            $table->boolean('isOnline')->default(false);
+            $table->integer('quantity');
+            $table->float('cost');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -18,7 +18,6 @@ class Price extends Model
      * @property string $id
      * @property string $serviceId
      * @property float $cost
-     * @property string $categoryId
      * @property boolean $isTime
      */
     protected $fillable = [
