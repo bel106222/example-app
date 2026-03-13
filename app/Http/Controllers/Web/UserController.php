@@ -6,6 +6,7 @@ use App\Filters\UserFilters;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Models\Organization;
 use App\Models\User;
 use App\Repository\UserRepository;
 use Illuminate\Http\RedirectResponse;
@@ -61,12 +62,17 @@ class UserController extends Controller
 //                ->has('phones')
 //                ->get()
 //        ); //запросили коллекцию объектов имеющих телефоны (связь с таблицей phones)
-
+//        $genres = Genre::query()->paginate(10);
+//        $trashedGenres = Genre::onlyTrashed()->paginate(10);
+//
+//        return view('genres.index', ['genres' => $genres, 'trashedGenres' => $trashedGenres]);
+        $organizations = Organization::query()->get();
         return view('users.index', [
             'users' => $this->userFilters
                 ->apply($request, $query)
                 ->paginate(10)
                 ->withQueryString(),
+            'organizations' => $organizations,
         ]);
     }
 

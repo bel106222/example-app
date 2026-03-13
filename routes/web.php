@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Web\BookController;
+use App\Http\Controllers\Web\CategoryController;
 use App\Http\Controllers\Web\OrganizationController;
 use App\Http\Controllers\Web\UserController;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +45,17 @@ Route::prefix('organizations')->name('organizations.')->group(callback: function
     Route::patch('{organization}', [OrganizationController::class, 'update'])->name('update');
     Route::delete('{organization}', [OrganizationController::class, 'destroy'])->name('destroy');
     Route::post('{organization}/restore', [OrganizationController::class, 'restore'])->name('restore');
+});
+
+//CATEGORY CONTROLLER
+Route::prefix('categories')->name('categories.')->group(callback: function () {
+    Route::get('', [CategoryController::class, 'index'])->name('index');
+    Route::get('create', [CategoryController::class, 'create'])->name('create');
+    Route::post('', [CategoryController::class, 'store'])->name('store');
+    Route::get('{category}/show', [CategoryController::class, 'show'])->name('show');
+    Route::patch('{category}', [CategoryController::class, 'update'])->name('update');
+    Route::delete('{category}', [CategoryController::class, 'destroy'])->name('destroy');
+    Route::post('{category}/restore', [CategoryController::class, 'restore'])->name('restore');
 });
 
 Auth::routes();

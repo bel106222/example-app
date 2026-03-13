@@ -131,10 +131,10 @@
                             Email
                         </th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            Дата регистрации
+                            Организация
                         </th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            Администратор
+                            Инженер
                         </th>
                         <th scope="col" class="px-6 py-4 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                             Действия
@@ -164,7 +164,7 @@
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                {{ $user->created_at->format('d.m.Y H:i') }}
+                                {{ $organizations->firstWhere('id', $user->organization_id)->title }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
 {{--                                {{ $user->is_admin }}--}}

@@ -32,8 +32,6 @@ class OrganizationController extends Controller
     }
     public function show(Organization $organization) //Display the specified resource.
     {
-        //$user = User::query()->find($id);
-        //dd($user);
         return view('organizations.show', [
             'organization' => $organization
         ]);
@@ -64,7 +62,6 @@ class OrganizationController extends Controller
     public function restore(string $organizationId): RedirectResponse
     {
         Organization::withTrashed()->where('id', $organizationId)->firstOrFail()->restore();
-
         return redirect()->route('organizations.index')->with('success', 'Организация восстановлена.');
     }
 }
