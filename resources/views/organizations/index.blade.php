@@ -1,203 +1,154 @@
 @extends('layouts.main')
 
-@section('title', 'Книги')
+@section('title', 'Организации')
 
 @section('content')
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-    <div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-950 dark:to-gray-900 py-8 md:py-12">
-        @if (session('success'))
-            <div class="fixed top-4 right-4 z-50 animate-fade-in">
-                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-lg max-w-md">
-                    <div class="flex items-center">
-                        <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <p class="font-medium">{{ session('success') }}</p>
-                    </div>
-                </div>
-            </div>
-        @endif
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
 
-            <!-- Заголовок + кнопка создания -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-10 gap-4">
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
-                    Управление организациями
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+                    Организации
                 </h1>
-
-{{--                @if(auth()->user()?->isAdmin())--}}
-{{--                    <a href="{{ route('organizations.create') }}"--}}
-                    <a href="#"
-                       class="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition-all shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500/50">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                        </svg>
-                        Добавить организацию
-                    </a>
-{{--                @endif--}}
+                <p class="mt-2 text-gray-600 dark:text-gray-400">
+                    Все зарегистрированные организации системы
+                </p>
             </div>
 
-            <!-- Вкладки / переключатель -->
-            <div class="mb-8 border-b border-gray-200 dark:border-gray-700">
-                <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                    <button type="button"
-                            class="tab-btn px-4 py-2 border-b-2 border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-500 font-medium text-lg transition-all"
-                            data-tab="active" data-active="true">
-                        Активные
-                        <span class="ml-2 text-sm font-normal text-gray-500 dark:text-gray-400">({{ $organizations->total() }})</span>
-                    </button>
+            <a href="{{ route('organizations.create') }}"
+               class="inline-flex items-center px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700
+                  text-white font-medium rounded-lg shadow-md transition-all duration-200
+                  transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                Добавить организацию
+            </a>
+        </div>
 
-                    <button type="button"
-                            class="tab-btn px-4 py-2 border-b-2 border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-500 font-medium text-lg transition-all"
-                            data-tab="trashed">
-                        Удалённые
-                        <span class="ml-2 text-sm font-normal text-gray-500 dark:text-gray-400">({{ $trashedOrganizations->total() }})</span>
-                    </button>
-                </nav>
-            </div>
+        <!-- Card -->
+        <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
 
-            <!-- Активные организации -->
-            <div id="tab-active" class="tab-content">
-                @if ($organizations->isEmpty())
-                    <div class="text-center py-16 text-gray-500 dark:text-gray-400 bg-white/50 dark:bg-gray-800/30 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700">
-                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <p class="text-lg">Активных организаций пока нет</p>
-                    </div>
-                @else
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        @foreach($organizations as $organization)
-                            <a href="{{ route('organizations.edit', $organization->id) }}"
-                               class="group bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300 hover:-translate-y-1">
-
-                                <div class="h-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
-
-                                <div class="p-6">
-                                    <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                                        {{ $book->title }}
-                                    </h3>
-
-                                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400 font-mono">
-                                        {{ $users->firstWhere('id', $book->user_id)->name }}
-                                    </p>
-
-                                    <div class="mt-4 flex items-center justify-between text-sm">
-
-                                        <div class="flex items-center gap-3">
-                                            <span class="text-gray-500 dark:text-gray-400">
-                                                {{ $book->created_at?->diffForHumans() ?? '—' }}
-                                            </span>
-{{--                                            @if(auth()->user()?->isAdmin())--}}
-                                                <form action="{{ route('books.destroy', $book->id) }}" method="POST" class="inline"
-                                                      onsubmit="return confirm('Переместить книгу «{{ $book->title }}» в корзину?')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-sm">
-                                                        Удалить
-                                                    </button>
-                                                </form>
-{{--                                            @endif--}}
+            <!-- Table -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead class="bg-gray-50 dark:bg-gray-900/50">
+                    <tr>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            Префикс/Наименование
+                        </th>
+{{--                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">--}}
+{{--                            Реквизиты--}}
+{{--                        </th>--}}
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            Адрес
+                        </th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            Юр.лицо
+                        </th>
+                        <th scope="col" class="px-6 py-4 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            Действия
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    @forelse ($organizations as $organization)
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="shrink-0 h-10 w-10">
+                                        <div class="h-10 w-10 rounded-full bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
+                                            {{ strtoupper(substr($organization->title, 0, 3)) }}
+                                        </div>
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900 dark:text-white">
+                                            {{ $organization->title }}
                                         </div>
                                     </div>
                                 </div>
-                            </a>
-                        @endforeach
-                    </div>
-
-                    <div class="mt-10">
-                        {{ $books->links('pagination::tailwind') }}
-                    </div>
-                @endif
-            </div>
-
-            <!-- Удалённые книги (в корзине) -->
-            <div id="tab-trashed" class="tab-content hidden">
-                @if ($trashedBooks->isEmpty())
-                    <div class="text-center py-16 text-gray-500 dark:text-gray-400 bg-white/50 dark:bg-gray-800/30 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700">
-                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4M9 17h6m-3-4v4" />
-                        </svg>
-                        <p class="text-lg">Корзина пуста</p>
-                    </div>
-                @else
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        @foreach($trashedBooks as $book)
-                            <div class="group bg-gray-50 dark:bg-gray-900/50 rounded-xl shadow-sm border border-gray-300/50 dark:border-gray-700/50 overflow-hidden opacity-85 hover:opacity-100 transition-all duration-300">
-
-                                <div class="h-2 bg-gradient-to-r from-red-400 via-rose-500 to-pink-500"></div>
-
-                                <div class="p-6">
-                                    <h3 class="text-xl font-bold text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors line-through">
-                                        {{ $book->title }}
-                                    </h3>
-
-                                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-500 font-mono">
-                                        {{ $book->user_id }}
-                                    </p>
-
-                                    <div class="mt-4 flex items-center justify-between text-sm">
-{{--                                        @if(auth()->user()?->isAdmin())--}}
-                                            <div class="flex gap-4">
-                                                <form action="{{ route('books.restore', $book->id) }}" method="POST" class="inline">
-                                                    @csrf
-                                                    <button type="submit" class="text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 font-medium">
-                                                        Восстановить
-                                                    </button>
-                                                </form>
-{{--                                                <form action="#" method="POST" class="inline"--}}
-{{--                                                      onsubmit="return confirm('Удалить книгу «{{ $book->title }}» навсегда? Это действие нельзя отменить.')">--}}
-{{--                                                    @csrf--}}
-{{--                                                    @method('DELETE')--}}
-{{--                                                    <button type="submit" class="text-red-600 hover:text-red-800 dark:text-red-500 dark:hover:text-red-400 font-medium">--}}
-{{--                                                        Удалить навсегда--}}
-{{--                                                    </button>--}}
-{{--                                                </form>--}}
-                                            </div>
-{{--                                        @endif--}}
-                                    </div>
-
-                                    <p class="mt-3 text-xs text-gray-500 dark:text-gray-400 italic">
-                                        Удалён: {{ $book->deleted_at->diffForHumans() }}
-                                    </p>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900 dark:text-gray-300">
+                                    {{ $organization->address }}
                                 </div>
-                            </div>
-                        @endforeach
-                    </div>
+                            </td>
+{{--                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">--}}
+{{--                                {{ $organization->details }}--}}
+{{--                            </td>--}}
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                {{--                                {{ $user->is_admin }}--}}
+                                {{--                                <input type="checkbox" disabled @if($user->is_admin) checked @endif>--}}
+                                @if($organization->isLegal)
+                                    <span title="ЮЛ" style="color: green; font-size: 18px;">●</span>
+                                @else
+                                    <span title="ФЛ" style="color: red; font-size: 18px;">●</span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <div class="flex items-center justify-end gap-4">
+                                    <!-- Просмотр -->
+                                    <a href="{{ route('organizations.show', $organization) }}"
+                                       class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition"
+                                       title="Просмотр">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                    </a>
 
-                    <div class="mt-10">
-                        {{ $trashedBooks->links('pagination::tailwind') }}
-                    </div>
-                @endif
+                                    <!-- Редактирование (была ошибка — стоял show вместо edit) -->
+                                    <a href="{{ route('organizations.show', $organization) }}"
+                                       class="text-amber-600 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 transition"
+                                       title="Редактировать">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.828 2.828L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zM16.862 4.487L19.5 7.125" />
+                                        </svg>
+                                    </a>
+
+                                    <!-- Удаление -->
+                                    <form action="{{ route('organizations.destroy', $organization) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                                onclick="return confirm('Вы уверены, что хотите удалить организацию {{ addslashes($organization->title) }}?')"
+                                                class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 transition"
+                                                title="Удалить">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="px-6 py-16 text-center text-gray-500 dark:text-gray-400">
+                                <div class="text-6xl mb-4">😔</div>
+                                <p class="text-lg">Организации пока отсутствуют</p>
+                                <a href="{{ route('users.create') }}"
+                                   class="mt-4 inline-block text-indigo-600 dark:text-indigo-400 hover:underline">
+                                    Добавить первую организацию →
+                                </a>
+                            </td>
+                        </tr>
+                    @endforelse
+                    </tbody>
+                </table>
             </div>
+
+            <!-- Pagination -->
+            @if ($organizations->hasPages())
+                <div class="px-6 py-5 border-t border-gray-200 dark:border-gray-700">
+                    {{ $organizations->links() }}
+                    <!-- или {{ $organizations->links('pagination::tailwind') }} если хочешь именно tailwind-стиль -->
+                </div>
+            @endif
 
         </div>
     </div>
-
-    <!-- Простой JS для переключения вкладок -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const tabs = document.querySelectorAll('.tab-btn');
-            const contents = document.querySelectorAll('.tab-content');
-
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    // убираем активность у всех
-                    tabs.forEach(t => {
-                        t.classList.remove('border-indigo-600', 'text-indigo-600', 'dark:border-indigo-500', 'dark:text-indigo-400');
-                        t.classList.add('border-transparent', 'text-gray-500', 'dark:text-gray-400');
-                    });
-                    contents.forEach(c => c.classList.add('hidden'));
-
-                    // активируем выбранную
-                    tab.classList.remove('border-transparent', 'text-gray-500', 'dark:text-gray-400');
-                    tab.classList.add('border-indigo-600', 'text-indigo-600', 'dark:border-indigo-500', 'dark:text-indigo-400');
-
-                    const target = document.getElementById(`tab-${tab.dataset.tab}`);
-                    if (target) target.classList.remove('hidden');
-                });
-            });
-        });
-    </script>
-
 @endsection

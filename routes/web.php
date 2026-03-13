@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Web\BookController;
+use App\Http\Controllers\Web\OrganizationController;
 use App\Http\Controllers\Web\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,12 +37,13 @@ Route::prefix('books')->name('books.')->group(callback: function () {
 
 //ORGANIZATION CONTROLLER
 Route::prefix('organizations')->name('organizations.')->group(callback: function () {
-    Route::get('', [OrgaController::class, 'index'])->name('index');
-//    Route::get('create', [BookController::class, 'create'])->name('create');
-//    Route::get('{book}/edit', [BookController::class, 'edit'])->name('edit');
-//    Route::patch('{book}', [BookController::class, 'update'])->name('update');
-//    Route::delete('{book}', [BookController::class, 'destroy'])->name('destroy');
-//    Route::post('{book}/restore', [BookController::class, 'restore'])->name('restore');
+    Route::get('', [OrganizationController::class, 'index'])->name('index');
+    Route::get('create', [OrganizationController::class, 'create'])->name('create');
+    Route::post('', [OrganizationController::class, 'store'])->name('store');
+    Route::get('{organization}/show', [OrganizationController::class, 'show'])->name('show');
+    Route::patch('{organization}', [OrganizationController::class, 'update'])->name('update');
+    Route::delete('{organization}', [OrganizationController::class, 'destroy'])->name('destroy');
+    Route::post('{organization}/restore', [OrganizationController::class, 'restore'])->name('restore');
 });
 
 Auth::routes();
