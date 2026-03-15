@@ -91,7 +91,7 @@ class PriceSeeder extends Seeder
         foreach ($prices as $price) {
             Price::factory()->create([
                 'serviceId' => Service::query()->where('serviceName', $price[0])->firstOrFail()->id,
-                'isTime' => $price[1],
+                'isTime' => $price[1] === "true" ? 1 : 0,
                 'cost' => $price[2],
             ]);
         }

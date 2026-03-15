@@ -13,18 +13,12 @@ class OrganizationRepository
     final public function create(Request $request): Organization
     {
         DB::beginTransaction(); //используем транзакцию для попытки создания записи в БД
-        if($request->input('isLegal')==="1"){
-            $isLegal=true;
-        }
-        else{
-            $isLegal=false;
-        };
         try {
             $organizations = new Organization([
                 'title' => $request->title,
                 'address' => $request->address,
                 'details' => $request->details,
-                'isLegal' => $isLegal
+                'isLegal' => $request->input('isLegal')==="1" ? 1 : 0
             ]);
             $organizations->save();
             DB::commit();
@@ -38,18 +32,12 @@ class OrganizationRepository
     final public function update(Request $request, Organization $organization): Organization
     {
         DB::beginTransaction(); //используем транзакцию для попытки создания записи в БД
-        if($request->input('isLegal')==="1"){
-            $isLegal=true;
-        }
-        else{
-            $isLegal=false;
-        };
         try {
             $organization->update([
                 'title' => $request->title,
                 'address' => $request->address,
                 'details' => $request->details,
-                'isLegal' => $isLegal
+                'isLegal' => $request->input('isLegal')==="1" ? 1 : 0
             ]);
             $organization->save();
             DB::commit();

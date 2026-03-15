@@ -3,6 +3,7 @@
 use App\Http\Controllers\Web\BookController;
 use App\Http\Controllers\Web\CategoryController;
 use App\Http\Controllers\Web\OrganizationController;
+use App\Http\Controllers\Web\PriceController;
 use App\Http\Controllers\Web\ServiceController;
 use App\Http\Controllers\Web\UserController;
 use Illuminate\Support\Facades\Route;
@@ -68,6 +69,17 @@ Route::prefix('services')->name('services.')->group(callback: function () {
     Route::patch('{service}', [ServiceController::class, 'update'])->name('update');
     Route::delete('{service}', [ServiceController::class, 'destroy'])->name('destroy');
     Route::post('{service}/restore', [ServiceController::class, 'restore'])->name('restore');
+});
+
+//PRICE CONTROLLER
+Route::prefix('prices')->name('prices.')->group(callback: function () {
+    Route::get('', [PriceController::class, 'index'])->name('index');
+    Route::get('create', [PriceController::class, 'create'])->name('create');
+    Route::post('', [PriceController::class, 'store'])->name('store');
+    Route::get('{price}/show', [PriceController::class, 'show'])->name('show');
+    Route::patch('{price}', [PriceController::class, 'update'])->name('update');
+    Route::delete('{price}', [PriceController::class, 'destroy'])->name('destroy');
+    Route::post('{price}/restore', [PriceController::class, 'restore'])->name('restore');
 });
 
 Auth::routes();

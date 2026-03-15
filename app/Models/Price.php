@@ -21,7 +21,7 @@ class Price extends Model
      * @property boolean $isTime
      */
     protected $fillable = [
-        'serviceId',            //id услуги, к которой привязана цена
+        'serviceId',            //id услуга, к которой привязана цена
         'cost',                 //стоимость услуги
         'isTime'                //признак почасовой оплаты
     ];

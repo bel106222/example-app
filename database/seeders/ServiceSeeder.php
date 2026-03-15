@@ -103,7 +103,7 @@ class ServiceSeeder extends Seeder
                 'serviceName' => $service[0],
                 'serviceDescription' => $service[1],
                 'categoryId' => Category::query()->where('categoryName', $service[2])->firstOrFail()->id,
-                'isFixPrice' => $service[3]
+                'isFixPrice' => $service[3] === "true" ? 1 : 0
             ]);
         }
     }
