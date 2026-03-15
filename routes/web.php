@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Web\BookController;
 use App\Http\Controllers\Web\CategoryController;
+use App\Http\Controllers\Web\OrderController;
+use App\Http\Controllers\Web\OrderItemController;
 use App\Http\Controllers\Web\OrganizationController;
 use App\Http\Controllers\Web\PriceController;
 use App\Http\Controllers\Web\ServiceController;
@@ -80,6 +82,28 @@ Route::prefix('prices')->name('prices.')->group(callback: function () {
     Route::patch('{price}', [PriceController::class, 'update'])->name('update');
     Route::delete('{price}', [PriceController::class, 'destroy'])->name('destroy');
     Route::post('{price}/restore', [PriceController::class, 'restore'])->name('restore');
+});
+
+//ORDER CONTROLLER
+Route::prefix('orders')->name('orders.')->group(callback: function () {
+    Route::get('', [OrderController::class, 'index'])->name('index');
+    Route::get('create', [OrderController::class, 'create'])->name('create');
+    Route::post('', [OrderController::class, 'store'])->name('store');
+    Route::get('{order}/show', [OrderController::class, 'show'])->name('show');
+    Route::patch('{order}', [OrderController::class, 'update'])->name('update');
+    Route::delete('{order}', [OrderController::class, 'destroy'])->name('destroy');
+    Route::post('{order}/restore', [OrderController::class, 'restore'])->name('restore');
+});
+
+//ORDERITEM CONTROLLER
+Route::prefix('orderItems')->name('orderItems.')->group(callback: function () {
+    Route::get('', [OrderItemController::class, 'index'])->name('index');
+    Route::get('create', [OrderItemController::class, 'create'])->name('create');
+    Route::post('', [OrderItemController::class, 'store'])->name('store');
+    Route::get('{orderItem}/show', [OrderItemController::class, 'show'])->name('show');
+    Route::patch('{orderItem}', [OrderItemController::class, 'update'])->name('update');
+    Route::delete('{orderItem}', [OrderItemController::class, 'destroy'])->name('destroy');
+    Route::post('{orderItem}/restore', [OrderItemController::class, 'restore'])->name('restore');
 });
 
 Auth::routes();
