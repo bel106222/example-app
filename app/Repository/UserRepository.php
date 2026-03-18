@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\Avatar;
+use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -18,12 +19,19 @@ class UserRepository
 //        //методом query()->create, класса User, создаём нового пользователя из валидированных данных, полученных из UserStoreRequest
 //        $user = User::query()->create($userStoreRequest->validated());
         //dd($userStoreRequest->file('avatar'));
+
+        dd($userStoreRequest->organization_id);
         DB::beginTransaction(); //используем транзакцию для попытки создания записи в БД
         try {
             $user = new User();
             $user->name = $userStoreRequest->name;
             $user->email = $userStoreRequest->email;
             $user->password = Hash::make($userStoreRequest->password);
+            if (is_null($userStoreRequest->organization_id)) {
+                $user->organization_id = Organization::where('title', 'Не установлено')->first()?->id;
+            } else {
+                $user->organization_id = $userStoreRequest->organization_id;
+            }
             //$user->slug = Str::slug($user->name);
             $user->save();
 
@@ -63,6 +71,11 @@ class UserRepository
             //если изменения пароля не было, пропускаем его, иначе - берём из массива
             if (!empty($validated['password'])) {
                 $user->password = $validated['password'];
+            }
+            if (is_null($userUpdateRequest->organization_id)) {
+                $user->organization_id = Organization::where('title', 'Не установлено')->first()?->id;
+            } else {
+                $user->organization_id = $userUpdateRequest->organization_id;
             }
             if ($userUpdateRequest->hasFile('avatar')) {
                 $filePath = 'storage/' . $userUpdateRequest->file('avatar')->store('avatars', 'public');

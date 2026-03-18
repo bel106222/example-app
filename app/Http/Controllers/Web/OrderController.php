@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Repository\OrderRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class OrderController extends Controller
@@ -22,13 +23,23 @@ class OrderController extends Controller
     }
     public function index() : View
     {
-        $orders = Order::query()->paginate(10);
-        $users = User::query()->get();
-//        $prices = Price::query()->paginate(10);
+        $currentUser = Auth::user();
+        if($currentUser->is_admin){
+            $orders = Order::query()->paginate(10);
+            $users = User::query()->get();
+        }
+        else{
+            $orders = Order::query()
+                ->where('userId', $currentUser->id)
+                ->paginate(10);
+            $users = User::query()
+                ->where('name', $currentUser->name)
+                ->get();
+        }
         return view('orders.index',[
             'orders' => $orders,
             'users' => $users,
-//            'categories' => $categories,
+            'currentUser' => $currentUser,
         ]);
     }
     public function show(Order $order) //Display the specified resource.

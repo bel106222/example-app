@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('phone');
             $table->foreignId('organization_id')
+                ->nullable()
                 ->references('id')
                 ->on('organizations');
             $table->boolean('is_admin')->default(false);

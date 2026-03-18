@@ -27,12 +27,14 @@ class UserFactory extends Factory
     {
         $organizations = Organization::query()->get();
         $currentOrganization = $organizations->random();
+
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'phone' => fake()->phoneNumber(),
             'organization_id' => $currentOrganization->id,
+            'is_admin' => $currentOrganization->id === Organization::where('title', 'Сервисный центр')->first()?->id ? 1 : 0,
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
             'created_at' => fake()->dateTime(),

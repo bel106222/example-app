@@ -30,7 +30,7 @@ Route::get('/test', function () {
 
 //Route::middleware('auth')->resource('users', UserController::class);
 Route::resource('users', UserController::class);
-Route::get('/', [OrderController::class, 'index'])->name('index');
+//Route::get('/', [OrderController::class, 'index'])->name('index');
 
 //BOOKS CONTROLLER
 Route::prefix('books')->name('books.')->group(callback: function () {
@@ -111,4 +111,4 @@ Route::prefix('orderItems')->name('orderItems.')->group(callback: function () {
 
 Auth::routes();
 
-Route::get('/home', [\App\Http\Controllers\Web\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');

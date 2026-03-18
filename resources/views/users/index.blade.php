@@ -169,10 +169,10 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
 {{--                                {{ $user->is_admin }}--}}
 {{--                                <input type="checkbox" disabled @if($user->is_admin) checked @endif>--}}
-                                @if($user->active)
-                                    <span title="Администратор" style="color: green; font-size: 18px;">●</span>
+                                @if($user->is_admin)
+                                    <span title="Инженер" style="color: green; font-size: 18px;">●</span>
                                 @else
-                                    <span title="Пользователь" style="color: red; font-size: 18px;">●</span>
+                                    <span title="Клиент" style="color: red; font-size: 18px;">●</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
