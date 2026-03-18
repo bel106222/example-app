@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <title>@yield('title', 'Админ-панель')</title>
+    <title>@yield('title', 'Сервисный центр')</title>
 
     <!-- Tailwind CDN (для быстрого старта) -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -45,23 +45,37 @@
                 <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                 </svg>
-                <span>Admin</span>
+                <span>Сервисный центр</span>
             </a>
 
             <!-- Навигация (можно расширить) -->
             <nav class="hidden md:flex items-center gap-8">
+
+                <a href="{{ route('organizations.index') }}"
+                   class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition">
+                    Организации
+                </a>
                 <a href="{{ route('users.index') }}"
                    class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition">
                     Пользователи
                 </a>
-                <a href="#"
+                <a href="{{ route('orders.index') }}"
                    class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition">
                     Заказы
                 </a>
-                <a href="#"
+                <a href="{{ route('categories.index') }}"
                    class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition">
-                    Настройки
+                    Категории услуг
                 </a>
+                <a href="{{ route('services.index') }}"
+                   class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition">
+                    Услуги
+                </a>
+                <a href="{{ route('prices.index') }}"
+                   class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition">
+                    Цены
+                </a>
+
             </nav>
 
             <!-- Правая часть (пользователь, тема и т.д.) -->
@@ -107,7 +121,7 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
             <div>
-                © {{ date('Y') }} <span class="font-medium text-gray-900 dark:text-white">Admin Panel</span>. Все права защищены.
+                © {{ date('Y') }} <span class="font-medium text-gray-900 dark:text-white">Сервисный центр</span>. Все права защищены.
             </div>
             <div class="flex gap-6">
                 <a href="#" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Документация</a>

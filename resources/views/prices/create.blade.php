@@ -175,36 +175,32 @@
     </div>
 
 {{--    TODO: Скрипт для обработки фильтра услуг--}}
-{{--    <script>--}}
-{{--        document.addEventListener("DOMContentLoaded", function() {--}}
-{{--            let servicesSelect = document.querySelector('#serviceId');--}}
-{{--            let otherInputs = [--}}
-{{--                document.querySelector('#cost'),--}}
-{{--                document.querySelector('#isTime'),--}}
-{{--                document.querySelector('#created_at')--}}
-{{--            ];--}}
+    <script>
+        async function loadServices(url) {
+            const response = await fetch(url);
+            const result = await response.json();
 
-{{--            function filterServices(categorySelect) {--}}
-{{--                let categoryId = categorySelect.value;--}}
+            console.log(result.data);
+            let select = document.getElementById('serviceId');
+            select.innerHTML='';
 
-{{--                if (categoryId === '') { // Если категория не выбрана--}}
-{{--                    servicesSelect.innerHTML = '<option value="">Выберите услугу...</option>';--}}
-{{--                    servicesSelect.disabled = true;--}}
-{{--                    otherInputs.forEach(input => input.disabled = true); // Блокируем остальные поля--}}
-{{--                } else {--}}
-{{--                    servicesSelect.disabled = false;--}}
-{{--                    otherInputs.forEach(input => input.disabled = false); // Разблокируем остальные поля--}}
+            result.data.forEach(service => {
+                const option = document.createElement('option');
 
-{{--                    // Получаем все опции select--}}
-{{--                    let options = Array.from(document.querySelectorAll("#serviceId > option"));--}}
+                option.value = service.id;
+                option.textContent = service.serviceName;
 
-{{--                    // Оставляем только подходящие опции--}}
-{{--                    servicesSelect.innerHTML = '<option value="">Выберите услугу...</option>';--}}
-{{--                    options.filter(opt => opt.dataset.categoryId === categoryId).forEach(opt => {--}}
-{{--                        servicesSelect.appendChild(opt.cloneNode(true));--}}
-{{--                    });--}}
-{{--                }--}}
-{{--            }--}}
-{{--        });--}}
-{{--    </script>--}}
+                select.appendChild(option);
+            });
+        }
+
+        document.getElementById('categoryId').addEventListener('change', function (){
+            //alert(document.getElementById('categoryId').value);
+            let categoryId = document.getElementById('categoryId').value;
+            loadServices('/categories/' + categoryId + '/services');
+        })
+
+        //serviceId
+    </script>
+
 @endsection

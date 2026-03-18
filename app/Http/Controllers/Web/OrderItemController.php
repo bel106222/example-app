@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Service;
@@ -24,14 +23,9 @@ class OrderItemController extends Controller
     public function index(Order $order) : View
     {
         $orderItems = OrderItem::where('orderId', $order->id)->get();
-//        $services = Service::query()->paginate(10);
-//        $trashedServices = Service::onlyTrashed()->paginate(10);
-//        $categories = Category::query()->get();
         return view('orderItems.index',[
             'orderItems' => $orderItems,
-//            'services' => $services,
-//            'trashedServices' => $trashedServices,
-//            'categories' => $categories,
+            'order' => $order
         ]);
     }
     public function show(OrderItem $orderItem) //Display the specified resource.
@@ -48,19 +42,28 @@ class OrderItemController extends Controller
 //            'categories' => $categories,
         ]);
     }
-    public function create() //Show the form for creating a new resource.
+    public function create(Request $request) //Show the form for creating a new resource.
     {
-//        $categories = Category::query()->get();
-        return view('orderItems.create',[
-//            'categories' => $categories,
+        $services = Service::query()->get();
+        $orders = Order::query()->get();
+        $users = User::query()->get();
+        return view('orderItems.create', [
+            'services' => $services,
+            'orders' => $orders,
+            'users' => $users,
         ]);
+//        return redirect()->route(
+//            'orders.show',
+//            $this->orderItemRepository->create($request)
+//        )->with('success','Услуга по заказу удачно добавлена!') ;
     }
     public function store(Request $request)
     {
+        //dd($request->input());
         return redirect()->route(
-            'orderItems.index',
+            'orders.show',
             $this->orderItemRepository->create($request)
-        );
+        )->with('success','Услуга по заказу удачно добавлена!') ;
     }
     public function update(Request $request, OrderItem $orderItem) : RedirectResponse //Update the specified resource in storage.
     {

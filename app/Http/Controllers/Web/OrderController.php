@@ -48,7 +48,7 @@ class OrderController extends Controller
         $users = User::query()->get();
         return view('orders.create',[
             'users' => $users,
-//            'services' => $services
+            'currentOrderNumber' => (Order::max('orderNumber') ?? 0) + 1
         ]);
     }
 
@@ -73,7 +73,7 @@ class OrderController extends Controller
     }
     public function restore(string $orderId): RedirectResponse
     {
-        Price::withTrashed()->where('id', $orderId)->firstOrFail()->restore();
+        Order::withTrashed()->where('id', $orderId)->firstOrFail()->restore();
         return redirect()->route('orders.index')->with('success', 'Заказ восстановлен.');
     }
 }

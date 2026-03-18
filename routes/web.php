@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Web\BookController;
 use App\Http\Controllers\Web\CategoryController;
+use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\OrderController;
 use App\Http\Controllers\Web\OrderItemController;
 use App\Http\Controllers\Web\OrganizationController;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     //dd('Hello World!');
-    return view('welcome');
+    return view('home');
 });
 
 Route::get('/test', function () {
@@ -29,6 +30,7 @@ Route::get('/test', function () {
 
 //Route::middleware('auth')->resource('users', UserController::class);
 Route::resource('users', UserController::class);
+Route::get('/', [OrderController::class, 'index'])->name('index');
 
 //BOOKS CONTROLLER
 Route::prefix('books')->name('books.')->group(callback: function () {
@@ -60,6 +62,7 @@ Route::prefix('categories')->name('categories.')->group(callback: function () {
     Route::patch('{category}', [CategoryController::class, 'update'])->name('update');
     Route::delete('{category}', [CategoryController::class, 'destroy'])->name('destroy');
     Route::post('{category}/restore', [CategoryController::class, 'restore'])->name('restore');
+    Route::get('{category}/services', [CategoryController::class, 'getCategoryServiceByCategoryID'])->name('getCategoryServiceByCategoryID');
 });
 
 //SERVICE CONTROLLER
